@@ -1,6 +1,6 @@
 # Quick Deployment Guide - Get Running in Under 1 Hour
 
-This guide will help you get the Twitter Clone up and running quickly. Follow these steps in order.
+This guide will help you get the Flockr app up and running quickly. Follow these steps in order.
 
 ## Prerequisites
 

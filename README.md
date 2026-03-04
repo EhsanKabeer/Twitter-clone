@@ -1,6 +1,6 @@
-# Twitter Clone
+# Flockr
 
-A full-stack Twitter clone built with Next.js 14+, TypeScript, Recoil JS, Tailwind CSS, NextAuth, and Firebase. This is a portfolio-ready project featuring a modern dark mode UI, real-time updates, and all core Twitter functionality.
+A full-stack social app built with Next.js 14+, TypeScript, Recoil JS, Tailwind CSS, NextAuth, and Firebase. This is a portfolio-ready project featuring a modern dark mode UI, real-time updates, and all core Twitter-like functionality.
 
 ## Features
 

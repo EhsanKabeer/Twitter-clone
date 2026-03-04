@@ -44,13 +44,22 @@ export function useUserTweets(userId: string) {
     const loadTweets = async () => {
       setIsLoading(true);
       try {
+        // Fetch this user's tweets
         const userTweets = await getTweets([
           where("userId", "==", userId),
           where("isRetweet", "==", false),
           orderBy("createdAt", "desc"),
           limit(50),
         ]);
-        setTweets(userTweets);
+
+        // Attach user data so TweetCard can render name/avatar correctly
+        const userData = await getUser(userId);
+        const tweetsWithUser = userTweets.map((tweet) => ({
+          ...tweet,
+          user: userData || tweet.user,
+        }));
+
+        setTweets(tweetsWithUser);
       } catch (error) {
         console.error("Error loading user tweets:", error);
       } finally {

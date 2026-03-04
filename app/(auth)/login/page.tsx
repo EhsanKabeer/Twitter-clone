@@ -41,7 +41,26 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        toast.error(result.error || "Failed to sign in");
+        const raw = result.error;
+        let message = raw || "Failed to sign in";
+
+        // Map Firebase auth error codes to friendly messages
+        if (
+          raw?.includes("INVALID_LOGIN_CREDENTIALS") ||
+          raw?.includes("INVALID_PASSWORD") ||
+          raw?.includes("EMAIL_NOT_FOUND")
+        ) {
+          message = "Incorrect email or password. Please try again.";
+          setErrors({
+            email: "Check that this email is correct.",
+            password: "Check that this password is correct.",
+          });
+        } else if (raw?.includes("TOO_MANY_ATTEMPTS_TRY_LATER")) {
+          message =
+            "Too many failed attempts. Please wait a bit before trying again.";
+        }
+
+        toast.error(message);
       } else {
         toast.success("Signed in successfully!");
         router.push("/home");
@@ -66,7 +85,7 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
       <div className="glass rounded-2xl p-8 shadow-glass">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Twitter Clone</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Flockr</h1>
           <p className="text-foreground-muted">Sign in to your account</p>
         </div>
 

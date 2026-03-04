@@ -74,7 +74,7 @@ export default function TweetForm() {
       }
     }
 
-    await create(content, imageUrl, user.id);
+    await create(content, user.id, imageUrl);
     setContent("");
     setImageFile(null);
     setImagePreview(null);

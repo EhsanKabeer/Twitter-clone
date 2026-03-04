@@ -66,7 +66,8 @@ export const exploreFeedSelector = selector({
   key: "exploreFeedSelector",
   get: ({ get }) => {
     const tweets = get(tweetsState);
-    return tweets
+    // Recoil snapshots can freeze state, so clone before sorting
+    return [...tweets]
       .sort((a, b) => {
         // Sort by engagement (likes + retweets + comments)
         const engagementA = a.likesCount + a.retweetsCount + a.commentsCount;

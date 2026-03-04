@@ -74,22 +74,18 @@ export default function Modal({
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        {(title || onClose) && (
-          <div className="flex items-center justify-between p-6 border-b border-border">
-            {title && (
-              <h2 className="text-xl font-bold text-foreground">{title}</h2>
-            )}
-            {onClose && (
-              <button
-                onClick={onClose}
-                className="p-2 rounded-full hover:bg-background-hover transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5 text-foreground-muted" />
-              </button>
-            )}
-          </div>
-        )}
+        <div className="flex items-center justify-between p-6 border-b border-border">
+          {title && (
+            <h2 className="text-xl font-bold text-foreground">{title}</h2>
+          )}
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-background-hover transition-colors"
+            aria-label="Close modal"
+          >
+            <X className="w-5 h-5 text-foreground-muted" />
+          </button>
+        </div>
         <div className="p-6">{children}</div>
       </div>
     </div>

@@ -54,6 +54,30 @@ export default function RegisterPage() {
       return;
     }
 
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/7d00b7e7-12c8-44ec-ac26-295d2b890d65', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Debug-Session-Id': '7d56e5',
+      },
+      body: JSON.stringify({
+        sessionId: '7d56e5',
+        runId: 'signup-run-1',
+        hypothesisId: 'H1',
+        location: 'app/(auth)/register/page.tsx:handleSubmit:beforeSignIn',
+        message: 'Register submit passed client validation',
+        data: {
+          hasEmail: !!formData.email,
+          hasPassword: !!formData.password,
+          hasUsername: !!formData.username,
+          hasDisplayName: !!formData.displayName,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion agent log
+
     setIsLoading(true);
 
     try {
@@ -65,8 +89,50 @@ export default function RegisterPage() {
         redirect: false,
       });
 
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/7d00b7e7-12c8-44ec-ac26-295d2b890d65', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Debug-Session-Id': '7d56e5',
+        },
+        body: JSON.stringify({
+          sessionId: '7d56e5',
+          runId: 'signup-run-1',
+          hypothesisId: 'H2',
+          location: 'app/(auth)/register/page.tsx:handleSubmit:afterSignIn',
+          message: 'Result from credentials signIn',
+          data: {
+            hasResult: !!result,
+            hasError: !!result?.error,
+            ok: (result as any)?.ok ?? null,
+            status: (result as any)?.status ?? null,
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion agent log
+
       if (result?.error) {
-        toast.error(result.error || "Failed to create account");
+        const raw = result.error;
+        let message = raw || "Failed to create account";
+
+        if (raw?.includes("EMAIL_EXISTS")) {
+          message =
+            "An account with this email already exists. Please sign in instead.";
+          setErrors((prev) => ({
+            ...prev,
+            email: "This email is already registered. Try signing in instead.",
+          }));
+        } else if (raw?.includes("WEAK_PASSWORD")) {
+          message = "Password is too weak. Please choose a stronger password.";
+          setErrors((prev) => ({
+            ...prev,
+            password: "Password is too weak.",
+          }));
+        }
+
+        toast.error(message);
       } else {
         toast.success("Account created successfully!");
         router.push("/home");
@@ -91,7 +157,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <div className="glass rounded-2xl p-8 shadow-glass">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Twitter Clone</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Flockr</h1>
           <p className="text-foreground-muted">Create your account</p>
         </div>
 

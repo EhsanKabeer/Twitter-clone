@@ -51,8 +51,11 @@ export const updateUser = async (userId: string, updates: Partial<User>): Promis
 // Tweet operations
 export const createTweet = async (tweetData: Omit<Tweet, "id" | "createdAt">): Promise<string> => {
   const tweetsRef = collection(db, "tweets");
+  // Firestore does not allow undefined field values; strip them out (e.g. optional imageUrl)
+  const { imageUrl, ...rest } = tweetData as any;
   const docRef = await addDoc(tweetsRef, {
-    ...tweetData,
+    ...rest,
+    ...(imageUrl !== undefined ? { imageUrl } : {}),
     createdAt: serverTimestamp(),
     likesCount: 0,
     retweetsCount: 0,

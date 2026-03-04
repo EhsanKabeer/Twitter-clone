@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Search, Menu } from "lucide-react";
 import { useRecoilState } from "recoil";
@@ -10,6 +11,22 @@ import Avatar from "@/components/ui/Avatar";
 export default function Header() {
   const { data: session } = useSession();
   const [ui, setUi] = useRecoilState(uiState);
+  const router = useRouter();
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUi({ ...ui, searchQuery: e.target.value });
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const query = e.currentTarget.value.trim();
+      if (query) {
+        // Navigate to the search page; it will read uiState.searchQuery
+        router.push("/search");
+      }
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-sm">
@@ -19,7 +36,7 @@ export default function Header() {
             <Menu className="w-6 h-6 text-foreground" />
           </button>
           <Link href="/home" className="text-xl font-bold text-accent">
-            Twitter Clone
+            Flockr
           </Link>
         </div>
 
@@ -30,9 +47,8 @@ export default function Header() {
               type="text"
               placeholder="Search..."
               value={ui.searchQuery}
-              onChange={(e) =>
-                setUi({ ...ui, searchQuery: e.target.value })
-              }
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
               className="w-full pl-12 pr-4 py-2.5 bg-background-card border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-foreground-muted"
             />
           </div>

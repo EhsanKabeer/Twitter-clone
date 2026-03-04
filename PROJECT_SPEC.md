@@ -1,4 +1,4 @@
-# Twitter Clone - Technical Project Specification
+# Flockr - Technical Project Specification
 
 ## Project Overview
 
@@ -247,5 +247,5 @@ Potential features that could be added:
 
 ## Conclusion
 
-This Twitter Clone project represents a complete full-stack web application built with modern technologies and best practices. It demonstrates proficiency in React, Next.js, Firebase, and related technologies while implementing core social media features with real-time capabilities. The codebase is well-organized, type-safe, and production-ready, making it suitable for portfolio presentation to potential employers.
+This Flockr project represents a complete full-stack web application built with modern technologies and best practices. It demonstrates proficiency in React, Next.js, Firebase, and related technologies while implementing core social media features with real-time capabilities. The codebase is well-organized, type-safe, and production-ready, making it suitable for portfolio presentation to potential employers.
 

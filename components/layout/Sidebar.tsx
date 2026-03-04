@@ -20,7 +20,7 @@ export default function Sidebar() {
     <aside className="hidden md:flex md:flex-col md:w-64 md:border-r md:border-border md:bg-background">
       <div className="flex flex-col h-screen p-4">
         <div className="flex items-center justify-center mb-8">
-          <h1 className="text-2xl font-bold text-accent">Twitter Clone</h1>
+          <h1 className="text-2xl font-bold text-accent">Flockr</h1>
         </div>
 
         <nav className="flex-1 space-y-2">

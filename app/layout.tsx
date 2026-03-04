@@ -3,8 +3,8 @@ import "./globals.css";
 import Providers from "@/components/providers/Providers";
 
 export const metadata: Metadata = {
-  title: "Twitter Clone",
-  description: "A full-stack Twitter clone built with Next.js",
+  title: "Flockr",
+  description: "A full-stack social app built with Next.js",
 };
 
 export default function RootLayout({

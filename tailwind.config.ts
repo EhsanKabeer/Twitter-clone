@@ -5,20 +5,22 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/(auth)/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/(main)/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
         background: {
-          DEFAULT: "#0a0a0a",
-          card: "#16181c",
-          hover: "#1e1f24",
+          DEFAULT: "#f5f8fa", // app background
+          card: "#ffffff",    // cards / panels
+          hover: "#e8f5fe",   // soft blue hover similar to Twitter
         },
         foreground: {
-          DEFAULT: "#ededed",
-          muted: "#8b98a5",
-          subtle: "#71767a",
+          DEFAULT: "#0f1419", // main text
+          muted: "#536471",   // secondary text
+          subtle: "#8899a6",
         },
         accent: {
           DEFAULT: "#1d9bf0",
@@ -26,8 +28,8 @@ const config: Config = {
           light: "#8ecdf8",
         },
         border: {
-          DEFAULT: "#2f3336",
-          light: "#38444d",
+          DEFAULT: "#e1e8ed",
+          light: "#cfd9de",
         },
         success: "#00ba7c",
         error: "#f4212e",

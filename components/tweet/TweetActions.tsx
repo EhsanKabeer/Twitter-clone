@@ -74,15 +74,17 @@ export default function TweetActions({
         </span>
       </button>
 
-      <button
-        onClick={onRetweet}
-        className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-green-500/10 transition-colors group"
-      >
-        <Repeat2 className="w-5 h-5 text-foreground-muted group-hover:text-green-500" />
-        <span className="text-sm text-foreground-muted group-hover:text-green-500">
-          {tweet.retweetsCount || 0}
-        </span>
-      </button>
+      {!isOwner && (
+        <button
+          onClick={onRetweet}
+          className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-green-500/10 transition-colors group"
+        >
+          <Repeat2 className="w-5 h-5 text-foreground-muted group-hover:text-green-500" />
+          <span className="text-sm text-foreground-muted group-hover:text-green-500">
+            {tweet.retweetsCount || 0}
+          </span>
+        </button>
+      )}
 
       <button
         onClick={handleLike}

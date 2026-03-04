@@ -58,7 +58,7 @@ export function useTweets() {
 export function useCreateTweet() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const create = async (content: string, imageUrl?: string, userId: string) => {
+  const create = async (content: string, userId: string, imageUrl?: string) => {
     if (!content.trim()) {
       toast.error("Tweet cannot be empty");
       return;
@@ -76,8 +76,14 @@ export function useCreateTweet() {
         isRetweet: false,
       });
       toast.success("Tweet posted!");
-    } catch (error) {
-      toast.error("Failed to post tweet");
+    } catch (error: any) {
+      // Surface the real error to both console and UI for debugging
+      console.error("Failed to create tweet:", error);
+      const message =
+        typeof error?.message === "string" && error.message.length > 0
+          ? error.message
+          : "Failed to post tweet";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

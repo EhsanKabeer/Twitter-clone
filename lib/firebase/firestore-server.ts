@@ -1,10 +1,10 @@
-import { adminDb } from "./server-config";
+import { getAdminDb } from "./server-config";
 import { User } from "@/types";
 
 // Server-side Firestore operations using Admin SDK
 export const getUserServer = async (userId: string): Promise<User | null> => {
   try {
-    const userDoc = await adminDb.collection("users").doc(userId).get();
+    const userDoc = await getAdminDb().collection("users").doc(userId).get();
     if (userDoc.exists) {
       const data = userDoc.data();
       return {
@@ -22,7 +22,7 @@ export const getUserServer = async (userId: string): Promise<User | null> => {
 
 export const createUserServer = async (userData: Omit<User, "createdAt">): Promise<void> => {
   try {
-    await adminDb.collection("users").doc(userData.id).set({
+    await getAdminDb().collection("users").doc(userData.id).set({
       ...userData,
       createdAt: new Date(),
     });
