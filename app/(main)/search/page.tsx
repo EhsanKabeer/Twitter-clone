@@ -61,7 +61,15 @@ export default function SearchPage() {
       const filteredTweets = tweetsRef.filter((tweet) =>
         tweet.content.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setTweets(filteredTweets);
+
+      // Attach user objects so TweetCard can show names instead of "Unknown User"
+      const userMap = new Map(allUsers.map((u) => [u.id, u]));
+      const tweetsWithUsers = filteredTweets.map((tweet) => ({
+        ...tweet,
+        user: userMap.get(tweet.userId) || tweet.user,
+      }));
+
+      setTweets(tweetsWithUsers);
     } catch (error) {
       console.error("Error performing search:", error);
     } finally {

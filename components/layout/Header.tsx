@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Search, Menu } from "lucide-react";
 import { useRecoilState } from "recoil";
@@ -12,6 +12,7 @@ export default function Header() {
   const { data: session } = useSession();
   const [ui, setUi] = useRecoilState(uiState);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUi({ ...ui, searchQuery: e.target.value });
@@ -40,19 +41,21 @@ export default function Header() {
           </Link>
         </div>
 
-        <div className="flex-1 max-w-xl mx-4 hidden md:block">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-foreground-muted" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={ui.searchQuery}
-              onChange={handleSearchChange}
-              onKeyDown={handleSearchKeyDown}
-              className="w-full pl-12 pr-4 py-2.5 bg-background-card border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-foreground-muted"
-            />
+        {pathname !== "/search" && (
+          <div className="flex-1 max-w-xl mx-4 hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={ui.searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                className="w-full pl-12 pr-4 py-2.5 bg-background-card border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-foreground-muted"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {session?.user && (
           <Link href={`/profile/${session.user.id}`}>
