@@ -50,18 +50,27 @@ export const updateUser = async (userId: string, updates: Partial<User>): Promis
 
 // Tweet operations
 export const createTweet = async (tweetData: Omit<Tweet, "id" | "createdAt">): Promise<string> => {
+  if (!tweetData?.userId || !tweetData?.content?.trim()) {
+    throw new Error("userId and content are required");
+  }
+  if (!db) {
+    throw new Error("Firestore is not initialized");
+  }
   const tweetsRef = collection(db, "tweets");
-  // Firestore does not allow undefined field values; strip them out (e.g. optional imageUrl)
-  const { imageUrl, ...rest } = tweetData as any;
-  const docRef = await addDoc(tweetsRef, {
-    ...rest,
-    ...(imageUrl !== undefined ? { imageUrl } : {}),
+  // Firestore does not allow undefined; write only known fields with defined values
+  const payload: Record<string, unknown> = {
+    userId: tweetData.userId,
+    content: tweetData.content,
     createdAt: serverTimestamp(),
     likesCount: 0,
     retweetsCount: 0,
     commentsCount: 0,
     isRetweet: false,
-  });
+  };
+  if (tweetData.imageUrl != null && tweetData.imageUrl !== "") {
+    payload.imageUrl = tweetData.imageUrl;
+  }
+  const docRef = await addDoc(tweetsRef, payload);
   return docRef.id;
 };
 

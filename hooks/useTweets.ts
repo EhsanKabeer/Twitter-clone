@@ -5,7 +5,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { tweetsState, usersState } from "@/lib/recoil/atoms";
 import {
   subscribeToTweets,
-  createTweet,
   deleteTweet,
   likeTweet,
   unlikeTweet,
@@ -58,7 +57,7 @@ export function useTweets() {
 export function useCreateTweet() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const create = async (content: string, userId: string, imageUrl?: string) => {
+  const create = async (content: string, _userId: string, imageUrl?: string) => {
     if (!content.trim()) {
       toast.error("Tweet cannot be empty");
       return;
@@ -66,18 +65,19 @@ export function useCreateTweet() {
 
     setIsLoading(true);
     try {
-      await createTweet({
-        userId,
-        content: content.trim(),
-        imageUrl,
-        likesCount: 0,
-        retweetsCount: 0,
-        commentsCount: 0,
-        isRetweet: false,
+      const res = await fetch("/api/tweets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: content.trim(), imageUrl: imageUrl ?? undefined }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const message = data?.error || (res.status === 401 ? "Please sign in again" : "Failed to post tweet");
+        toast.error(message);
+        return;
+      }
       toast.success("Tweet posted!");
     } catch (error: any) {
-      // Surface the real error to both console and UI for debugging
       console.error("Failed to create tweet:", error);
       const message =
         typeof error?.message === "string" && error.message.length > 0

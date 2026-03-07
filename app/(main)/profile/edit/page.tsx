@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { updateUser } from "@/lib/firebase/firestore";
+import { updateUser, getUsers } from "@/lib/firebase/firestore";
+import { where } from "firebase/firestore";
 import { uploadAvatar } from "@/lib/firebase/storage";
 import { validateDisplayName, validateBio, validateUsername } from "@/lib/validation";
 import Button from "@/components/ui/Button";
@@ -102,6 +103,18 @@ export default function EditProfilePage() {
       return;
     }
 
+    const trimmedUsername = formData.username.trim();
+    const existingWithUsername = await getUsers([where("username", "==", trimmedUsername)]);
+    const takenByOther = existingWithUsername.some((u) => u.id !== user.id);
+    if (takenByOther) {
+      setErrors((prev) => ({
+        ...prev,
+        username: "This username is already taken.",
+      }));
+      toast.error("This username is already taken. Please choose another.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       let avatarUrl = user.avatar;
@@ -111,7 +124,7 @@ export default function EditProfilePage() {
 
       await updateUser(user.id, {
         displayName: formData.displayName.trim(),
-        username: formData.username.trim(),
+        username: trimmedUsername,
         bio: formData.bio.trim(),
         avatar: avatarUrl,
       });

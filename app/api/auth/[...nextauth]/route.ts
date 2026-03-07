@@ -1,10 +1,10 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { getUserServer, createUserServer } from "@/lib/firebase/firestore-server";
+import { getUserServer, createUserServer, getUserByUsernameServer } from "@/lib/firebase/firestore-server";
 import { verifyPassword, createUserWithEmailPassword } from "@/lib/firebase/auth-rest";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -46,6 +46,11 @@ const authOptions: NextAuthOptions = {
             // Sign up
             if (!credentials.username) {
               throw new Error("Username is required for sign up");
+            }
+
+            const existingByUsername = await getUserByUsernameServer(credentials.username);
+            if (existingByUsername) {
+              throw new Error("USERNAME_TAKEN");
             }
 
             // Create user with Firebase Auth REST API

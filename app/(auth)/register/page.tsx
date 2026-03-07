@@ -124,6 +124,12 @@ export default function RegisterPage() {
             ...prev,
             email: "This email is already registered. Try signing in instead.",
           }));
+        } else if (raw?.includes("USERNAME_TAKEN")) {
+          message = "This username is already taken. Please choose another.";
+          setErrors((prev) => ({
+            ...prev,
+            username: "This username is already taken.",
+          }));
         } else if (raw?.includes("WEAK_PASSWORD")) {
           message = "Password is too weak. Please choose a stronger password.";
           setErrors((prev) => ({
